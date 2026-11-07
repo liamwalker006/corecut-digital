@@ -66,7 +66,7 @@ export default function Hero() {
         </p>
 
         {/* 4 mobile / 7 desktop — video testimonials slider (replaces the VSL placeholder), full width of the screen */}
-        <div className="order-4 md:order-7 mt-6 md:mt-14 w-screen max-w-none ml-[calc(50%-50vw)]">
+        <div className="order-4 md:order-7 mt-6 md:mt-14 w-screen max-w-none flex-shrink-0">
           <VideoTestimonials />
         </div>
 
