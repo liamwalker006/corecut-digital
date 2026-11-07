@@ -1,9 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Play, X } from 'lucide-react'
-import AnimatedSection from '@/components/ui/AnimatedSection'
-import { SectionPill } from '@/components/ui/SectionPill'
 
 // Real client interviews filmed Oct/Nov 2026. Thumbnails show Owen with the roofer; the hook on each
 // thumbnail is a number the roofer says in their video.
@@ -28,7 +27,8 @@ function Player({ t, onClose }: { t: T; onClose: () => void }) {
     }
   }, [onClose])
 
-  return (
+  // rendered on <body>: the hero's fade-in transform would otherwise trap a fixed overlay inside it
+  return createPortal(
     <div
       className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
       onClick={onClose}
@@ -54,23 +54,21 @@ function Player({ t, onClose }: { t: T; onClose: () => void }) {
           <X className="w-5 h-5" />
         </button>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
+// Sits in the hero where the demo video was: a heading line, then the sliding bar running edge to edge.
 export default function VideoTestimonials() {
   const [open, setOpen] = useState<T | null>(null)
 
   return (
-    <section className="py-16 md:py-24 bg-bgPrimary overflow-hidden" id="video-testimonials">
-      <AnimatedSection className="text-center mb-10 md:mb-14 px-4">
-        <SectionPill>Video Testimonials</SectionPill>
-        <h2 className="text-3xl md:text-5xl font-black mb-4">
-          See what other roofers{' '}
-          <em className="font-serif italic text-brand not-italic font-normal">have to say about us.</em>
-        </h2>
-        <p className="text-textMuted text-lg">Real CoreCut clients, filmed on site. Tap a video to watch.</p>
-      </AnimatedSection>
+    <div id="video-testimonials" className="w-full">
+      <p className="text-lg md:text-2xl font-bold mb-4 md:mb-6 px-4 text-center">
+        See what other roofers{' '}
+        <em className="font-serif italic text-brand not-italic font-normal">have to say about us.</em>
+      </p>
 
       {/* sliding bar: three copies of the set, moved left by one copy per loop so it never jumps */}
       <div className="group relative motion-reduce:overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
@@ -107,6 +105,6 @@ export default function VideoTestimonials() {
       </div>
 
       {open && <Player t={open} onClose={() => setOpen(null)} />}
-    </section>
+    </div>
   )
 }
