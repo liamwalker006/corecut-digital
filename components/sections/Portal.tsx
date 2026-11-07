@@ -114,8 +114,8 @@ export default function Portal() {
               <img
                 src="/portal/daniel-portal.jpg"
                 alt="Daniel from RSC Developments holding up his CoreCut portal on his phone"
-                width={960}
-                height={1200}
+                width={1086}
+                height={1448}
                 loading="lazy"
                 className="w-full h-auto"
               />
