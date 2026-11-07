@@ -71,7 +71,7 @@ export default function VideoTestimonials() {
       </p>
 
       {/* sliding bar: three copies of the set, moved left by one copy per loop so it never jumps */}
-      <div className="group relative motion-reduce:overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_4%)]">
+      <div className="group relative motion-reduce:overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)]">
         <div
           className={`flex w-max animate-slide group-hover:[animation-play-state:paused] motion-reduce:animate-none ${
             open ? '[animation-play-state:paused]' : ''
