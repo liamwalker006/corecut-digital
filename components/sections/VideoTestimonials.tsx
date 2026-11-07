@@ -1,144 +1,112 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { Play } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Play, X } from 'lucide-react'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { SectionPill } from '@/components/ui/SectionPill'
 
-// Real client interviews filmed Oct/Nov 2026. Quotes and numbers are the roofers' own words from the videos.
+// Real client interviews filmed Oct/Nov 2026. Thumbnails show Owen with the roofer; the hook on each
+// thumbnail is a number the roofer says in their video.
 const testimonials = [
-  {
-    slug: 'daniel-rsc-developments',
-    name: 'Daniel',
-    company: 'RSC Developments',
-    area: 'Torbay',
-    stat: '3–4 leads a day',
-    quote: 'It was more than what I expected… the leads just kept coming through.',
-  },
-  {
-    slug: 'rocky-tiptop-roofing',
-    name: 'Rocky',
-    company: 'Tiptop Roofing & Building',
-    area: 'Barnstaple, North Devon',
-    stat: 'Nearly 90 enquiries',
-    quote: 'Within my first week I had over 10, and converted I think half of them.',
-  },
-  {
-    slug: 'jonjo-js-roofing',
-    name: 'Jonjo',
-    company: 'JS Roofing',
-    area: 'Somerset & Wiltshire',
-    stat: 'Appointments booked for him',
-    quote: "We haven't got to call anyone… we just turn up to the job, look and quote it.",
-  },
-  {
-    slug: 'kain-ksh-roofing',
-    name: 'Kain',
-    company: 'KSH Roofing',
-    area: 'South of England',
-    stat: '£60k+ of work',
-    quote: "We're booked up for another two and a half, three months now.",
-  },
-  {
-    slug: 'alex-homecrest-solutions',
-    name: 'Alex',
-    company: 'Homecrest Solutions',
-    area: 'South West',
-    stat: '£85k single job',
-    quote: "I've still had constant work all year, thanks to you and your company.",
-  },
+  { slug: 'daniel-rsc-developments', name: 'Daniel', company: 'RSC Developments' },
+  { slug: 'rocky-tiptop-roofing', name: 'Rocky', company: 'Tiptop Roofing & Building' },
+  { slug: 'jonjo-js-roofing', name: 'Jonjo', company: 'JS Roofing' },
+  { slug: 'kain-ksh-roofing', name: 'Kain', company: 'KSH Roofing' },
+  { slug: 'alex-homecrest-solutions', name: 'Alex', company: 'Homecrest Solutions' },
 ]
+type T = (typeof testimonials)[number]
 
-function VideoCard({ slug, name, company }: { slug: string; name: string; company: string }) {
-  const ref = useRef<HTMLVideoElement>(null)
-  const [started, setStarted] = useState(false)
-
-  const play = () => {
-    const v = ref.current
-    if (!v) return
-    // only one testimonial plays at a time
-    document.querySelectorAll<HTMLVideoElement>('video[data-testimonial]').forEach((o) => {
-      if (o !== v) o.pause()
-    })
-    setStarted(true)
-    v.play()
-  }
+function Player({ t, onClose }: { t: T; onClose: () => void }) {
+  useEffect(() => {
+    const key = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', key)
+    const overflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', key)
+      document.body.style.overflow = overflow
+    }
+  }, [onClose])
 
   return (
-    <div className="relative w-full max-w-[340px] mx-auto aspect-[9/16] rounded-2xl overflow-hidden border border-white/10 bg-bgCard shadow-[0_0_40px_rgba(125,212,212,0.08)]">
-      <video
-        ref={ref}
-        data-testimonial
-        src={`/testimonials/${slug}.mp4`}
-        poster={`/testimonials/${slug}.jpg`}
-        preload="none"
-        playsInline
-        controls={started}
-        onPlay={(e) => {
-          document.querySelectorAll<HTMLVideoElement>('video[data-testimonial]').forEach((o) => {
-            if (o !== e.currentTarget) o.pause()
-          })
-        }}
-        className="w-full h-full object-cover"
-        aria-label={`Video testimonial from ${name}, ${company}`}
-      />
-      {!started && (
+    <div
+      className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${t.name}, ${t.company}: video testimonial`}
+    >
+      <div className="relative h-full max-h-[88vh] aspect-[9/16] max-w-full" onClick={(e) => e.stopPropagation()}>
+        <video
+          src={`/testimonials/${t.slug}.mp4`}
+          poster={`/testimonials/${t.slug}.jpg`}
+          autoPlay
+          controls
+          playsInline
+          className="w-full h-full rounded-2xl bg-black object-contain"
+        />
         <button
           type="button"
-          onClick={play}
-          className="absolute inset-0 flex items-center justify-center group"
-          aria-label={`Play ${name}'s testimonial`}
+          onClick={onClose}
+          className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-white text-black flex items-center justify-center shadow-lg"
+          aria-label="Close video"
         >
-          <span className="w-20 h-20 rounded-full bg-brand flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-110">
-            <Play className="w-8 h-8 text-black fill-black ml-1" />
-          </span>
+          <X className="w-5 h-5" />
         </button>
-      )}
+      </div>
     </div>
   )
 }
 
 export default function VideoTestimonials() {
-  return (
-    <section className="py-20 md:py-32 bg-bgPrimary" id="video-testimonials">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection className="text-center mb-16 md:mb-20">
-          <SectionPill>Video Testimonials</SectionPill>
-          <h2 className="text-3xl md:text-5xl font-black mb-4">
-            See what other roofers{' '}
-            <em className="font-serif italic text-brand not-italic font-normal">have to say about us.</em>
-          </h2>
-          <p className="text-textMuted text-lg">
-            Real CoreCut clients, filmed on site. Tap a video to hear it from them.
-          </p>
-        </AnimatedSection>
+  const [open, setOpen] = useState<T | null>(null)
 
-        <div className="flex flex-col gap-16 md:gap-24">
-          {testimonials.map((t, i) => (
-            <AnimatedSection key={t.slug}>
-              <div
-                className={`flex flex-col items-center gap-8 md:gap-14 ${
-                  i % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'
-                }`}
+  return (
+    <section className="py-16 md:py-24 bg-bgPrimary overflow-hidden" id="video-testimonials">
+      <AnimatedSection className="text-center mb-10 md:mb-14 px-4">
+        <SectionPill>Video Testimonials</SectionPill>
+        <h2 className="text-3xl md:text-5xl font-black mb-4">
+          See what other roofers{' '}
+          <em className="font-serif italic text-brand not-italic font-normal">have to say about us.</em>
+        </h2>
+        <p className="text-textMuted text-lg">Real CoreCut clients, filmed on site. Tap a video to watch.</p>
+      </AnimatedSection>
+
+      {/* sliding bar: three copies of the set, moved left by one copy per loop so it never jumps */}
+      <div className="group relative motion-reduce:overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+        <div
+          className={`flex w-max animate-slide group-hover:[animation-play-state:paused] motion-reduce:animate-none ${
+            open ? '[animation-play-state:paused]' : ''
+          }`}
+        >
+          {[0, 1, 2].map((copy) =>
+            testimonials.map((t) => (
+              <button
+                key={`${copy}-${t.slug}`}
+                type="button"
+                onClick={() => setOpen(t)}
+                tabIndex={copy === 0 ? 0 : -1}
+                aria-hidden={copy !== 0}
+                aria-label={`Play ${t.name}'s testimonial (${t.company})`}
+                className="relative flex-shrink-0 w-[210px] sm:w-[240px] md:w-[270px] aspect-[9/16] mr-4 md:mr-5 rounded-2xl overflow-hidden border border-white/10 bg-bgCard shadow-[0_0_40px_rgba(125,212,212,0.08)] group/card focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
-                <div className="w-full md:w-1/2">
-                  <VideoCard slug={t.slug} name={t.name} company={t.company} />
-                </div>
-                <div className="w-full md:w-1/2 text-center md:text-left">
-                  <p className="text-brand text-sm font-bold uppercase tracking-widest mb-3">{t.stat}</p>
-                  <blockquote className="text-2xl md:text-3xl font-bold leading-snug mb-6">
-                    &ldquo;{t.quote}&rdquo;
-                  </blockquote>
-                  <p className="font-semibold text-white">{t.name}</p>
-                  <p className="text-textMuted text-sm">
-                    {t.company} · {t.area}
-                  </p>
-                </div>
-              </div>
-            </AnimatedSection>
-          ))}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/testimonials/${t.slug}-thumb.jpg`}
+                  alt={`Owen from CoreCut with ${t.name} from ${t.company}`}
+                  decoding="async"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
+                />
+                <span className="absolute top-4 left-1/2 -translate-x-1/2 w-14 h-14 md:w-16 md:h-16 rounded-full bg-brand/95 flex items-center justify-center shadow-lg transition-transform duration-200 group-hover/card:scale-110">
+                  <Play className="w-6 h-6 md:w-7 md:h-7 text-black fill-black ml-1" />
+                </span>
+              </button>
+            )),
+          )}
         </div>
       </div>
+
+      {open && <Player t={open} onClose={() => setOpen(null)} />}
     </section>
   )
 }

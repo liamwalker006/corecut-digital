@@ -15,13 +15,13 @@ export default function Home() {
   return (
     <main>
       <Hero />
+      <VideoTestimonials />
       <StatsBar />
       <TrustBar />
       <LiveProof />
       <Problem />
       <Solution />
       <HowItWorks />
-      <VideoTestimonials />
       <Results />
       <Comparison />
       <FAQ />
