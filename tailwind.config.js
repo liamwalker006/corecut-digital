@@ -20,6 +20,7 @@ module.exports = {
       },
       animation: {
         marquee: 'marquee 6s linear infinite',
+        slide: 'marquee 45s linear infinite',
       },
       keyframes: {
         marquee: {

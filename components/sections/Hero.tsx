@@ -1,6 +1,6 @@
-import { Play } from 'lucide-react'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { BOOKING_URL } from '@/lib/constants'
+import VideoTestimonials from '@/components/sections/VideoTestimonials'
 
 const avatars = [
   { initials: 'JR', bg: '#0c3535' },
@@ -15,15 +15,15 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="flex flex-col items-center text-center px-4 md:px-6 pt-24 pb-8 md:min-h-screen md:justify-center md:pt-28 md:pb-0"
+      className="flex flex-col items-center text-center overflow-x-clip px-4 md:px-6 pt-24 pb-8 md:min-h-screen md:justify-center md:pt-28 md:pb-0"
       style={{
         background:
           'radial-gradient(ellipse 120% 50% at 50% -10%, #0a2a2a 0%, #051515 40%, #000000 70%)',
       }}
     >
       {/*
-        Mobile order:  trust → headline → sub → VSL → guarantee → CTA → micro-text
-        Desktop order: trust → headline → sub → guarantee → CTA → micro-text → VSL
+        Mobile order:  trust → headline → sub → testimonials slider → guarantee → CTA → micro-text
+        Desktop order: trust → headline → sub → guarantee → CTA → micro-text → testimonials slider
         Controlled via CSS order-* on each child of the flex-col container.
       */}
       <AnimatedSection className="w-full max-w-2xl mx-auto flex flex-col items-center">
@@ -65,18 +65,9 @@ export default function Hero() {
           for an exclusive appointment. You just show up and close.
         </p>
 
-        {/* 4 mobile / 7 desktop — VSL card */}
-        <div
-          className="order-4 md:order-7 mt-4 md:mt-12 w-full rounded-2xl border border-white/10 aspect-video flex flex-col items-center justify-center bg-[#141414]"
-          style={{ boxShadow: '0 0 60px rgba(125,212,212,0.1)' }}
-        >
-          {/* VSL VIDEO — ADD EMBED HERE NEXT WEEK */}
-          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-brand flex items-center justify-center bg-brand/10 hover:bg-brand/20 transition-colors cursor-pointer">
-            <Play className="w-5 h-5 md:w-6 md:h-6 text-brand fill-brand ml-0.5" />
-          </div>
-          <p className="text-xs md:text-sm text-gray-500 mt-3 md:mt-4 max-w-xs text-center px-4">
-            Watch: How CoreCut Gets You 30–60 Exclusive Roofing Enquiries Every Month
-          </p>
+        {/* 4 mobile / 7 desktop — video testimonials slider (replaces the VSL placeholder), full width of the screen */}
+        <div className="order-4 md:order-7 mt-6 md:mt-14 w-screen max-w-none ml-[calc(50%-50vw)]">
+          <VideoTestimonials />
         </div>
 
         {/* 6 mobile / 5 desktop — CTA button */}
