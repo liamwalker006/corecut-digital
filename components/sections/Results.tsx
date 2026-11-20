@@ -1,49 +1,73 @@
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { SectionPill } from '@/components/ui/SectionPill'
 
-const reviews = [
+// Real Google reviews, copied word for word (newest first). Dates are the month
+// the review was left, so they don't go stale like Google's "2 days ago".
+type Review = {
+  initials: string
+  name: string
+  meta: string | null
+  date: string | null
+  badge?: string
+  body: string | null
+}
+
+const reviews: Review[] = [
+  {
+    initials: 'DC',
+    name: 'Daniel Cooke',
+    meta: null,
+    date: 'Nov 2026',
+    body: 'Where do you Start! What an exceptional company Leeds have not stopped coming in averaging around 10 a week and securing more than 60% would definitely recommend to any upcoming small businesses that are looking to expand. Thank you so much, ladies and gentlemen and corecut team members',
+  },
+  {
+    initials: 'B',
+    name: 'Billy',
+    meta: 'LB Roofing',
+    date: 'Nov 2026',
+    body: 'Liam and Owen did exactly what they said they would. Does exactly what it says on the tin. Over 100 quotes booked from their ads, good homeowners, and I don’t have to touch any of the tech. Top lads.',
+  },
+  {
+    initials: 'SP',
+    name: 'Scott Probert',
+    meta: null,
+    date: 'Nov 2026',
+    body: 'We run a small roofing company and we decide to use corecut digital. Right from the start they were fantastic. We spoke for a couple of months before deciding to use them and have no complaints at all. Liam and Owen are fantastic.',
+  },
+  {
+    initials: 'JM',
+    name: 'Jordan Miller',
+    meta: null,
+    date: 'Nov 2026',
+    body: 'Excellent service, really professional and honest',
+  },
+  {
+    initials: 'LC',
+    name: 'Luke Clee',
+    meta: null,
+    date: 'Nov 2026',
+    body: 'Working with this team as done good for my company lots of work comeing in lots of quotes to give simon and owen are good lads good to work with',
+  },
   {
     initials: 'AD',
     name: 'Adam Dempsey',
-    meta: '1 review',
-    date: 'a week ago',
-    badge: 'New',
+    meta: null,
+    date: 'Sep 2026',
     body: "Been with Corecut a year and a half now and it's easily one of the best calls we've made, they knew their stuff from the off and put us at ease straight away, quotes have been coming in consistently ever since and we've grown the crew off the back of it. Always on hand when we need them, nothing's ever too much trouble. Great works lads 👏",
   },
   {
     initials: 'OF',
-    name: 'Oscar francis',
-    meta: '1 review',
-    date: 'a month ago',
+    name: 'Oscar Francis',
+    meta: null,
+    date: 'Aug 2026',
     body: "Liam and Owen have been nothing but outstanding throughout our time working together. The team have helped me build my company profile and reputation online which has helped me secure multiple jobs in my area. This has then lead to them recommending me to family and friends for more work. They are great lads who work round the clock to give you the best opportunity's for work, they are 100% committed to working with you and helping you grow.",
   },
   {
     initials: 'DB',
     name: 'Darron Brady',
     meta: null,
-    date: 'a month ago',
+    date: null,
     body: null,
-  },
-  {
-    initials: 'JS',
-    name: 'Jakes Stevens',
-    meta: '2 reviews',
-    date: '4 months ago',
-    body: 'Working with Liam and Owen from Corecut has been a massive help for growing the business and bringing in more work. Would highly recommend',
-  },
-  {
-    initials: 'LA',
-    name: 'Louen Allsop',
-    meta: '3 reviews · 1 photo',
-    date: 'Edited 4 months ago',
-    body: 'Amazing team would highly recommend',
-  },
-  {
-    initials: 'AS',
-    name: 'Alex Smith',
-    meta: '1 review',
-    date: '4 months ago',
-    body: "Owen has been looking after my social media for the past five months and completely transformed my business. Don't know what I would do without all this help. Keep up the good work 👍👍👍👍👍",
   },
 ]
 
